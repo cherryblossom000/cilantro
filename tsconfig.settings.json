@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "composite": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "lib": ["ES2021"],
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "importHelpers": true,
+    "removeComments": true,
+
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": true,
+    "strict": true
+  }
+}

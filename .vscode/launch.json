@@ -1,0 +1,54 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch",
+      "program": "${workspaceFolder}/src/index.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {"group": "0 launch"}
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch ignoring node_modules",
+      "program": "${workspaceFolder}/src/server.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "presentation": {"group": "0 launch"}
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch (watch)",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/src/server.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {"group": "1 watch"}
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch (watch) ignoring node_modules",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/src/server.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "restart": true,
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "presentation": {"group": "1 watch"}
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Register Commands",
+      "program": "${workspaceFolder}/scripts/src/register-commands.ts",
+      "outFiles": ["${workspaceFolder}/scripts/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "presentation": {"group": "2 scripts"}
+    }
+  ]
+}

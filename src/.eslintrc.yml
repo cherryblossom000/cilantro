@@ -1,0 +1,3 @@
+rules:
+  promise/prefer-await-to-callbacks: 0
+  promise/no-promise-in-callback: 0

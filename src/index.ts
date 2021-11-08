@@ -1,7 +1,7 @@
+import * as http from 'node:http'
 import {Player, Song} from 'discord-music-player'
 import {Client, Intents} from 'discord.js'
 import dotenv from 'dotenv'
-import Koa from 'koa'
 import commands from './commands.js'
 import * as db from './database.js'
 import {inlineCode} from './discordjs-builders.js'
@@ -117,15 +117,18 @@ client
 
 await client.login()
 
-const listener = new Koa()
-  .use(ctx => {
-    ctx.body = `Cilantro is up and running!
+const TEXT = `Cilantro is up and running!
 What, did you expect a proper website? Lol no`
+const LENGTH = Buffer.byteLength(TEXT)
+const server = http
+  .createServer((_, res) => {
+    res.writeHead(200, {
+      'Content-Type': 'text/plain',
+      'Content-Length': LENGTH
+    })
+    res.end(TEXT)
   })
   .listen(Number(process.env.PORT), () => {
-    if (dev) {
-      console.log(
-        `http://localhost:${(listener.address() as AddressInfo).port}`
-      )
-    }
+    if (dev)
+      console.log(`http://localhost:${(server.address() as AddressInfo).port}`)
   })

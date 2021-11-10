@@ -4,8 +4,10 @@ node_modules/
 .DS_Store
 .eslintcache
 .env
+.env-prod
 .pnpm-debug.log
 *.tsbuildinfo
 
-db/
+/db/
+/deploy/
 *.mongodb

@@ -5,18 +5,13 @@
   "publishConfig": {
     "access": "restricted"
   },
-  "homepage": "https://cilantro--cherryblossom00.repl.co",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cherryblossom000/cilantro"
-  },
   "type": "module",
   "main": "dist/index.js",
   "engines": {
     "node": ">=16.6"
   },
   "scripts": {
-    "lint": "eslint --max-warnings 0 --ext ts,cjs .",
+    "lint": "eslint --ext ts,cjs .",
     "lint:dev": "pnpm lint -- --cache",
     "build": "tsc -b",
     "watch": "pnpm build -- -w",
@@ -24,7 +19,8 @@
     "start": "node .",
     "init-db": "mkdir db",
     "start-db": "mongod --dbpath db",
-    "stop-db": "kill $(lsof -ntPi :27017)"
+    "stop-db": "kill $(lsof -ntPi :27017)",
+    "deploy": "./scripts/deploy.elv"
   },
   "dependencies": {
     "@discordjs/builders": "^0.8.2",

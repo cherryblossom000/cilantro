@@ -22,8 +22,8 @@ const command: Command = {
       embeds: [
         {
           title: nowPlayingText(nowPlaying),
-          image: {url: nowPlaying.thumbnail},
-          fields: [{name: 'Artist', value: nowPlaying.author}]
+          thumbnail: {url: nowPlaying.thumbnail},
+          fields: [{name: 'YouTube Author', value: nowPlaying.author}]
         }
       ],
       content: codeBlock(

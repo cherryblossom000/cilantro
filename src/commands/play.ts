@@ -105,16 +105,7 @@ const command: Command = {
     )
     song.seekTime = (seek === null ? undefined : parseTime(seek)) ?? 0
     try {
-      await queue.play(song, {
-        timecode: true,
-        requestedBy: user,
-        seek: seek === null ? undefined : parseTime(seek),
-        uploadDate: (options.getString(UPLOAD_DATE) ??
-          undefined) as PlayOptions['uploadDate'],
-        duration: (options.getString(DURATION) ??
-          undefined) as PlayOptions['duration'],
-        sortBy: (options.getString(SORT) ?? undefined) as PlayOptions['sortBy']
-      })
+      await queue.play(song)
     } catch (error) {
       if (error instanceof DMPError && error.name === DMPErrors.SEARCH_NULL) {
         await interaction.reply(

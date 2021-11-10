@@ -23,7 +23,8 @@
     "register-commands": "node scripts/dist/register-commands",
     "start": "node .",
     "init-db": "mkdir db",
-    "start-db": "mongod --dbpath db"
+    "start-db": "mongod --dbpath db",
+    "stop-db": "kill $(lsof -ntPi :27017)"
   },
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
@@ -39,8 +40,8 @@
     "@cherryblossom/eslint-config": "15.0.0-beta.24",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@types/ms": "^0.7.31",
-    "@types/node": "~16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@types/node": "~16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
     "discord-api-types": "^0.24.0",
     "eslint": "^8.2.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -50,7 +51,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.1",
-    "eslint-plugin-unicorn": "^38.0.0",
+    "eslint-plugin-unicorn": "^38.0.1",
     "prettier": "^2.4.1",
     "typescript": "~4.4.4"
   }

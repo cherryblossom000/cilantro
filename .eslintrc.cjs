@@ -13,11 +13,7 @@ module.exports = {
     '@cherryblossom/eslint-config/node/16'
   ],
   ignorePatterns: ['.history/', 'dist/'],
-  parserOptions: {
-    project: projects,
-    tsconfigRootDir,
-    EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true
-  },
+  parserOptions: {project: projects, tsconfigRootDir},
   overrides: [
     {
       files: '**/.eslintrc.cjs',
@@ -25,7 +21,6 @@ module.exports = {
         jsdoc: {mode: 'typescript'}
       },
       rules: {
-        'id-length': 0,
         'import/no-unused-modules': 0
       }
     },

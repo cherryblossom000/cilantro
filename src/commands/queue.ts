@@ -4,7 +4,7 @@ import {
   MessageButton,
   MessageEmbed
 } from 'discord.js'
-import {SlashCommandBuilder} from '../discordjs-builders.js'
+import {SlashCommandBuilder, hyperlink} from '../discordjs-builders.js'
 import type {GuildTextBasedChannel} from 'discord.js'
 import type {Command} from '../command.js'
 
@@ -47,7 +47,10 @@ const command: Command = {
         }`,
         fields: current.map((song, i) => ({
           name: `${start + i + 1}. ${song.name}`,
-          value: `Requested by ${song.requestedBy!}`
+          value: `${hyperlink(
+            'Link',
+            song.url
+          )} | Requested by ${song.requestedBy!}`
         }))
       })
     }

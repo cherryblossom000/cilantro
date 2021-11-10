@@ -1,5 +1,5 @@
 import * as http from 'node:http'
-import {Player, Song} from 'discord-music-player'
+import {Player} from 'discord-music-player'
 import {Client, Intents} from 'discord.js'
 import dotenv from 'dotenv'
 import commands from './commands.js'
@@ -62,34 +62,6 @@ const player = new Player(client, {deafenOnJoin: true})
 
 client
   .once('ready', () => console.log('ready'))
-  .once('guildCreate', async ({id}) => {
-    try {
-      const {queue: songs = [], volume} =
-        (await db.getGuild(database, id)) ?? {}
-      if (volume !== undefined || songs.length) {
-        const queue = player.createQueue(id)
-        if (volume !== undefined) queue.setVolume(volume)
-        if (songs.length) {
-          await Promise.all(
-            songs.map(async song =>
-              queue.play(
-                new Song(
-                  song.raw,
-                  queue,
-                  await client.users.fetch(song.requester)
-                )
-              )
-            )
-          )
-        }
-      }
-    } catch (error) {
-      handleError(
-        client,
-        `Failed to initialise queue and volume of guild ${id}`
-      )(error)
-    }
-  })
   .on(
     'error',
     handleError(client, `The ${inlineCode('error')} client event fired`)
@@ -101,7 +73,10 @@ client
       const {supportsDM = false, execute} = commands.get(commandName)!
       if (!supportsDM && !interaction.inGuild()) {
         await interaction
-          .reply('I only work in servers!')
+          .reply({
+            content: 'This command is only available in servers!',
+            ephemeral: true
+          })
           .catch(handleError(client, 'Failed to reply DM error message'))
         return
       }
@@ -109,9 +84,16 @@ client
       await execute(
         interaction as CommandInteraction<'present'>,
         player,
-        database,
-        guildsToTextChannels
-      ).catch(handleError(client, `Failed to execute command ${commandName}`))
+        guildsToTextChannels,
+        database
+      ).catch(
+        handleError(
+          client,
+          `Failed to execute command ${commandName}`,
+          interaction,
+          `Sorry, there was an error trying to execute /${commandName}.`
+        )
+      )
     }
   })
 

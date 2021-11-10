@@ -23,8 +23,8 @@ type CommandBase<SupportsDM extends boolean> = PropIfTrue<
       SupportsDM extends true ? CacheType : 'present'
     > & {readonly client: Client<true>},
     player: Player,
-    database: Db,
-    guildsToTextChannels: Map<Snowflake, GuildTextBasedChannel>
+    guildsToTextChannels: Map<Snowflake, GuildTextBasedChannel>,
+    database: Db
   ) => Promise<void>
 }
 

@@ -1,7 +1,9 @@
-import {ProgressBar} from 'discord-music-player'
-import {SlashCommandBuilder, bold} from '../discordjs-builders.js'
-import {getPlayingQueue} from '../utils.js'
+import {Utils} from 'discord-music-player'
+import {SlashCommandBuilder, codeBlock} from '../discordjs-builders.js'
+import {getPlayingQueue, nowPlayingText} from '../utils.js'
 import type {Command} from '../command.js'
+
+const BAR_LENGTH = 20
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -11,10 +13,25 @@ const command: Command = {
     const queue = await getPlayingQueue(interaction, player)
     if (!queue) return
 
-    await interaction.reply(
-      `Now playing ${bold(queue.nowPlaying.name)}
-${new ProgressBar(queue).prettier}`
+    const {connection, nowPlaying} = queue
+    const currentTime = nowPlaying.seekTime + connection.time
+    const progress = Math.round(
+      (currentTime / nowPlaying.milliseconds) * BAR_LENGTH
     )
+    await interaction.reply({
+      embeds: [
+        {
+          title: nowPlayingText(nowPlaying),
+          image: {url: nowPlaying.thumbnail},
+          fields: [{name: 'Artist', value: nowPlaying.author}]
+        }
+      ],
+      content: codeBlock(
+        `${'█'.repeat(progress)}${'▒'.repeat(
+          BAR_LENGTH - progress
+        )} [${Utils.msToTime(currentTime)}/${nowPlaying.duration}]`
+      )
+    })
   }
 }
 export default command

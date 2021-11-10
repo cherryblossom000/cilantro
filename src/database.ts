@@ -1,16 +1,9 @@
 import {MongoClient} from 'mongodb'
-import type {RawSong} from 'discord-music-player'
 import type {Snowflake} from 'discord.js'
 import type {Collection} from 'mongodb'
 
-interface Song {
-  readonly raw: RawSong
-  readonly requester: Snowflake
-}
-
 export interface Guild {
   readonly _id: Snowflake
-  readonly queue?: readonly Song[]
   readonly volume?: number
 }
 
@@ -33,35 +26,24 @@ export const getGuild = async (
   guildId: Snowflake
 ): Promise<Guild | undefined> => (await db.findOne({_id: guildId})) ?? undefined
 
-const get =
-  <K extends keyof Guild>(key: K) =>
-  async (db: Db, guildId: Snowflake): Promise<Guild[K] | undefined> =>
-    cache.get(guildId)?.[key] ??
-    (await db.findOne({_id: guildId}, {projection: {[key]: 1}}))?.[key] ??
-    undefined
+export const getVolume = async (
+  db: Db,
+  guildId: Snowflake
+): Promise<number | undefined> =>
+  cache.get(guildId)?.volume ??
+  (await db.findOne({_id: guildId}, {projection: {volume: 1}}))?.volume ??
+  undefined
 
-export const getQueue = get('queue')
-export const getVolume = get('volume')
-
-const set =
-  <K extends keyof Guild>(key: K) =>
-  async (db: Db, guildId: Snowflake, value: Guild[K]): Promise<void> => {
-    await db.updateOne({_id: guildId}, {$set: {[key]: value}})
-    cache.set(
-      guildId,
-      cache.has(guildId)
-        ? {...cache.get(guildId)!, [key]: value}
-        : {_id: guildId, [key]: value}
-    )
-  }
-
-export const setQueue = set('queue')
-export const setVolume = set('volume')
-
-export const addToQueue = async (
+export const setVolume = async (
   db: Db,
   guildId: Snowflake,
-  song: Song
+  volume: number
 ): Promise<void> => {
-  await db.updateOne({_id: guildId}, {$push: {queue: song}})
+  await db.updateOne({_id: guildId}, {$set: {volume}}, {upsert: true})
+  cache.set(
+    guildId,
+    cache.has(guildId)
+      ? {...cache.get(guildId)!, volume}
+      : {_id: guildId, volume}
+  )
 }

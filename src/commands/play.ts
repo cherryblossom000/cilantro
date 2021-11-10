@@ -1,9 +1,8 @@
-import {DMPError, DMPErrors} from 'discord-music-player'
-import {addToQueue} from '../database.js'
+import {DMPError, DMPErrors, Utils} from 'discord-music-player'
+import {getVolume} from '../database.js'
 import {bold, SlashCommandBuilder} from '../discordjs-builders.js'
-import {nowPlayingText} from '../utils.js'
-import type {GuildTextBasedChannel} from 'discord.js'
-import type {PlayOptions, Song} from 'discord-music-player'
+import {nowPlayingText, parseTime, setChannel} from '../utils.js'
+import type {PlayOptions} from 'discord-music-player'
 import type {Command} from '../command.js'
 import type {KeysMatching} from '../utils.js'
 
@@ -44,8 +43,10 @@ const command: Command = {
     .addStringOption(option =>
       option.setName(SONG).setDescription('The song to play.').setRequired(true)
     )
-    .addNumberOption(option =>
-      option.setName(SEEK).setDescription('The time to seek to.')
+    .addStringOption(option =>
+      option
+        .setName(SEEK)
+        .setDescription('The time to seek to. See /seek for details.')
     )
     .addStringOption(option =>
       option
@@ -65,8 +66,8 @@ const command: Command = {
         .setDescription('Sort YouTube results.')
         .addChoices(Object.entries(sortChoices))
     ),
-  execute: async (interaction, player, db, guildsToTextChannels) => {
-    const {channelId, client, guild, guildId, options, user} = interaction
+  execute: async (interaction, player, guildsToTextChannels, db) => {
+    const {guild, guildId, options, user} = interaction
 
     const voiceChannel = guild?.voiceStates.cache.get(user.id)?.channel
     if (!voiceChannel) {
@@ -79,21 +80,35 @@ const command: Command = {
 
     await interaction.deferReply()
     const queue = player.createQueue(guildId)
-    if (
-      (queue.connection as typeof queue.connection | undefined)?.channel.id !==
-      voiceChannel.id
-    )
+    const connection = queue.connection as typeof queue.connection | undefined
+    if (connection?.channel.id !== voiceChannel.id)
       await queue.join(voiceChannel)
+    queue.setVolume(((await getVolume(db, guildId)) ?? 100) * 2)
 
     const wasPlaying = queue.isPlaying
 
     const query = options.getString(SONG)!
-    let song: Song
-    try {
-      song = await queue.play(query, {
+    const seek = options.getString(SEEK)
+    // discord-music-player doesn't save seekTime when the song is not played immediately
+    const song = await Utils.best(
+      query,
+      {
         timecode: true,
         requestedBy: user,
-        seek: options.getNumber(SEEK) ?? undefined,
+        uploadDate: (options.getString(UPLOAD_DATE) ??
+          undefined) as PlayOptions['uploadDate'],
+        duration: (options.getString(DURATION) ??
+          undefined) as PlayOptions['duration'],
+        sortBy: (options.getString(SORT) ?? undefined) as PlayOptions['sortBy']
+      },
+      queue
+    )
+    song.seekTime = (seek === null ? undefined : parseTime(seek)) ?? 0
+    try {
+      await queue.play(song, {
+        timecode: true,
+        requestedBy: user,
+        seek: seek === null ? undefined : parseTime(seek),
         uploadDate: (options.getString(UPLOAD_DATE) ??
           undefined) as PlayOptions['uploadDate'],
         duration: (options.getString(DURATION) ??
@@ -110,25 +125,10 @@ const command: Command = {
       throw error
     }
 
-    guildsToTextChannels.set(
-      guildId,
-      (await client.channels.fetch(channelId)) as GuildTextBasedChannel
-    )
-    await addToQueue(db, guildId, {
-      raw: {
-        author: song.author,
-        duration: song.duration,
-        isLive: song.isLive,
-        name: song.name,
-        thumbnail: song.thumbnail,
-        url: song.url,
-        seekTime: song.seekTime
-      },
-      requester: user.id
-    })
+    await setChannel(guildsToTextChannels, interaction)
     await interaction.editReply(
       wasPlaying
-        ? `Added ${song.name} by ${song.author} to the queue.`
+        ? `Added ${bold(song.name)} to the queue.`
         : nowPlayingText(song)
     )
   }

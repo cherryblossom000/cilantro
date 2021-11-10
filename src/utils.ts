@@ -1,11 +1,18 @@
 import {Constants, DiscordAPIError} from 'discord.js'
 import {bold, codeBlock} from './discordjs-builders.js'
 import type {Player, Queue, Song} from 'discord-music-player'
-import type {CommandInteraction, Client, User} from 'discord.js'
+import type {
+  CommandInteraction,
+  Client,
+  GuildTextBasedChannel,
+  Snowflake
+} from 'discord.js'
 
 export type KeysMatching<T, V> = {
   [K in keyof T]-?: T[K] extends V ? K : never
 }[keyof T]
+
+type Override<T, U> = Omit<T, keyof U> & U
 
 export const dev = process.env.NODE_ENV !== 'production'
 
@@ -13,20 +20,13 @@ export const handleError =
   (
     client: Client,
     info?: string,
-    {
-      to: channelOrInteraction,
-      response: content = 'Sorry, there was an error trying to do that!',
-      followUp = false
-    }: {
-      to?: CommandInteraction
-      response?: string
-      followUp?: boolean
-    } = {}
+    interaction?: CommandInteraction,
+    response = 'Sorry, there was an error trying to do that!'
   ) =>
   (error: unknown): void => {
     if (!client.isReady()) {
       console.error('The error', error, 'occurred before the client was ready')
-      if (dev) throw error
+      // if (dev) throw error
       return
     }
 
@@ -43,18 +43,23 @@ export const handleError =
     // only error that will be thrown is if it's in development mode, which is intended
     // eslint-disable-next-line @typescript-eslint/no-floating-promises -- ^
     ;(async (): Promise<void> => {
-      if (channelOrInteraction) {
-        await (followUp
-          ? channelOrInteraction.followUp({content, ephemeral: true})
-          : channelOrInteraction.reply({content, ephemeral: true})
+      if (interaction) {
+        const options = {content: response, ephemeral: true}
+        ;(interaction.deferred
+          ? interaction.editReply(options)
+          : interaction.replied
+          ? interaction.followUp(options)
+          : interaction.reply(options)
         ).catch(errorHandler)
       }
-      if (dev) throw error
-      await (client.application.owner as User)
+      // if (dev) throw error
+      await (
+        await client.users.fetch(process.env.OWNER_ID!)
+      )
         .send(
           `${info === undefined ? '' : `${info}:\n`}${bold(
             `Error at ${new Date().toLocaleString()}`
-          )}${
+          )}: ${
             error instanceof Error
               ? error.stack!
                 ? `
@@ -81,8 +86,47 @@ ${codeBlock('json', JSON.stringify(error.requestData, null, 2))}`
     })()
   }
 
-export const nowPlayingText = (song: Song): string =>
-  `Now playing ${song.name} by ${song.author}`
+const TIME_RE =
+  // eslint-disable-next-line unicorn/no-unsafe-regex -- don't know how else to do it
+  /^(?<relative>\+|-)?(?:(?:(?<hrs>\d+):)?(?<mins>\d+):)?(?<secs>\d+)$/u as Override<
+    RegExp,
+    {
+      exec(string: string): Override<
+        RegExpExecArray,
+        {
+          groups: {
+            relative?: '-' | '+'
+            hrs?: string
+            mins?: string
+            secs: string
+          }
+        }
+      > | null
+    }
+  >
+
+export const parseTime = (time: string, queue?: Queue): number | undefined => {
+  const groups = TIME_RE.exec(time)?.groups
+  if (!groups) return
+
+  const {relative, hrs, mins, secs} = groups
+  const ms =
+    ((hrs === undefined ? 0 : Number(hrs) * 3600) +
+      (mins === undefined ? 0 : Number(mins) * 60) +
+      Number(secs)) *
+    1000
+  if (Number.isNaN(ms)) return
+  return queue
+    ? relative === '+'
+      ? queue.connection.time + ms
+      : relative === '-'
+      ? queue.connection.time - ms
+      : ms
+    : ms
+}
+
+export const nowPlayingText = (song: Song) =>
+  `Now playing ${bold(song.name)}.` as const
 
 export const getQueue = async (
   interaction: CommandInteraction<'present'>,
@@ -106,4 +150,14 @@ export const getPlayingQueue = async (
     return
   }
   return queue
+}
+
+export const setChannel = async (
+  guildsToTextChannels: Map<Snowflake, GuildTextBasedChannel>,
+  {channelId, client, guildId}: CommandInteraction<'present'>
+): Promise<void> => {
+  guildsToTextChannels.set(
+    guildId,
+    (await client.channels.fetch(channelId)) as GuildTextBasedChannel
+  )
 }

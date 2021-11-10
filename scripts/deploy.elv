@@ -3,11 +3,13 @@
 use str
 use path
 
-pnpm build
-pnpm lint
-
 var scripts-dir = (path:dir (src)[name])
 var root-dir = (path:dir $scripts-dir)
+
+rm -r $root-dir/dist
+
+pnpm build
+pnpm lint
 
 each [line]{
   var key val = (str:split '=' $line)
@@ -17,7 +19,7 @@ each [line]{
 pnpm register-commands
 
 var out-dir = $root-dir/deploy
-var _ = ?(rm -r $out-dir)
+var _ = ?(rm -rf $out-dir)
 mkdir -p $out-dir
 cd $out-dir
 
@@ -50,6 +52,6 @@ echo '/node_modules/
 git init
 hub remote add origin cherryblossom000/cilantro
 git switch -c replit
-git add package.json pnpm-lock.yaml .replit replit.nix dist/**.js
+git add package.json pnpm-lock.yaml .gitignore .replit replit.nix dist/**.js
 git commit -m 'update'
 git push -f origin replit

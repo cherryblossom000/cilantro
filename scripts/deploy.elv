@@ -23,16 +23,11 @@ var _ = ?(rm -rf $out-dir)
 mkdir -p $out-dir
 cd $out-dir
 
-cp -r $root-dir/dist .
+cp -r $root-dir/{dist, package.json,pnpm-lock.yaml} .
 
-var package = (from-json < $root-dir/package.json)
-del package[devDependencies]
-to-json [$package] > package.json
-
-cp $root-dir/pnpm-lock.yaml .
-
+var install = 'pnpm install -P --frozen-lockfile'
 echo 'lang = "nix"
-run = "pnpm install; pnpm install && pnpm start"' > .replit
+run = "'$install'; '$install' && pnpm start"' > .replit
 
 echo '{ pkgs }: {
   deps = with pkgs; [

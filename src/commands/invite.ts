@@ -23,6 +23,7 @@ const command: Command = {
                 url: interaction.client.generateInvite({
                   scopes: ['applications.commands', 'bot'],
                   permissions: [
+                    Permissions.FLAGS.VIEW_CHANNEL,
                     Permissions.FLAGS.SEND_MESSAGES,
                     Permissions.FLAGS.EMBED_LINKS,
                     Permissions.FLAGS.CONNECT,

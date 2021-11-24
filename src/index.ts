@@ -1,7 +1,6 @@
 import * as http from 'node:http'
 import {Player} from 'discord-music-player'
 import {Client, Intents} from 'discord.js'
-import dotenv from 'dotenv'
 import commands from './commands.js'
 import * as db from './database.js'
 import {inlineCode} from './discordjs-builders.js'
@@ -12,8 +11,7 @@ import type {
   GuildTextBasedChannel,
   Snowflake
 } from 'discord.js'
-
-dotenv.config()
+import 'dotenv/config'
 
 const database = await db.connect()
 

@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@cherryblossom/eslint-config': 15.0.0-beta.24
+  '@cherryblossom/eslint-config': 15.0.0-beta.25
   '@discordjs/builders': ^0.8.2
   '@discordjs/opus': ^0.6.0
   '@discordjs/rest': ^0.1.0-canary.0
@@ -38,7 +38,7 @@ dependencies:
   tslib: 2.3.1
 
 devDependencies:
-  '@cherryblossom/eslint-config': 15.0.0-beta.24_905d46a1d9cc850e40092db5611df8f0
+  '@cherryblossom/eslint-config': 15.0.0-beta.25_905d46a1d9cc850e40092db5611df8f0
   '@discordjs/rest': 0.1.0-canary.0
   '@types/ms': 0.7.31
   '@types/node': 16.11.7
@@ -292,8 +292,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@cherryblossom/eslint-config/15.0.0-beta.24_905d46a1d9cc850e40092db5611df8f0:
-    resolution: {integrity: sha512-vOUkkHSmMxnI1/Q8mgRjnWrzpTHNjbUx2Z1U+uNV6Stx1oK+5LaNxcBq9dJnhxqLJtYzESDxUbwN0OYBXdNEyA==}
+  /@cherryblossom/eslint-config/15.0.0-beta.25_905d46a1d9cc850e40092db5611df8f0:
+    resolution: {integrity: sha512-bB/71m3Qwi7OzTj09cPhVjfQzJ5O7QDUHUQx2ws4zS0MRI0VbmpXFub6KwXyXvZFCX8scJokEZn2hFst0se65g==}
     engines: {node: '>=14'}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5

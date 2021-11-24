@@ -80,8 +80,7 @@ const command: Command = {
 
     await interaction.deferReply()
     const queue = player.createQueue(guildId)
-    const connection = queue.connection as typeof queue.connection | undefined
-    if (connection?.channel.id !== voiceChannel.id)
+    if (queue.connection?.channel.id !== voiceChannel.id)
       await queue.join(voiceChannel)
     queue.setVolume(((await getVolume(db, guildId)) ?? 100) * 2)
 

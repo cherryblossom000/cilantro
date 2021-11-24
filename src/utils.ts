@@ -105,7 +105,14 @@ const TIME_RE =
     }
   >
 
-export const parseTime = (time: string, queue?: Queue): number | undefined => {
+type Require<T, K extends keyof T> = T & {[P in K]: NonNullable<T[P]>}
+
+type PlayingQueue = Require<Queue, 'connection' | 'nowPlaying'>
+
+export const parseTime = (
+  time: string,
+  queue?: PlayingQueue
+): number | undefined => {
   const groups = TIME_RE.exec(time)?.groups
   if (!groups) return
 
@@ -143,13 +150,13 @@ export const getQueue = async (
 export const getPlayingQueue = async (
   interaction: CommandInteraction<'present'>,
   player: Player
-): Promise<Queue | undefined> => {
+): Promise<PlayingQueue | undefined> => {
   const queue = player.getQueue(interaction.guildId)
   if (!(queue?.isPlaying ?? false)) {
     await interaction.reply({content: 'Nothing is playing!', ephemeral: true})
     return
   }
-  return queue
+  return queue as PlayingQueue
 }
 
 export const setChannel = async (

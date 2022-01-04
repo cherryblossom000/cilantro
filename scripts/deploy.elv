@@ -41,8 +41,7 @@ echo '{ pkgs }: {
 }' > replit.nix
 
 echo '/node_modules/
-/.cache/
-' > .gitignore
+/.cache/' > .gitignore
 
 git init
 hub remote add origin cherryblossom000/cilantro

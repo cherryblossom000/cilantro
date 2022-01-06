@@ -1,5 +1,5 @@
+import {bold, codeBlock} from '@discordjs/builders'
 import {Constants, DiscordAPIError} from 'discord.js'
-import {bold, codeBlock} from './discordjs-builders.js'
 import type {Player, Queue, Song} from 'discord-music-player'
 import type {
   CommandInteraction,

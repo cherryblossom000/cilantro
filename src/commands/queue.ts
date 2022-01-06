@@ -1,10 +1,10 @@
+import {SlashCommandBuilder, hyperlink} from '@discordjs/builders'
 import {
   Message,
   MessageActionRow,
   MessageButton,
   MessageEmbed
 } from 'discord.js'
-import {SlashCommandBuilder, hyperlink} from '../discordjs-builders.js'
 import type {GuildTextBasedChannel} from 'discord.js'
 import type {Command} from '../command.js'
 

@@ -1,9 +1,9 @@
 import * as http from 'node:http'
+import {inlineCode} from '@discordjs/builders'
 import {Player} from 'discord-music-player'
 import {Client, Intents} from 'discord.js'
 import commands from './commands.js'
 import * as db from './database.js'
-import {inlineCode} from './discordjs-builders.js'
 import {dev, handleError, nowPlayingText} from './utils.js'
 import type {AddressInfo} from 'node:net'
 import type {

@@ -1,5 +1,5 @@
+import {SlashCommandBuilder} from '@discordjs/builders'
 import ms from 'ms'
-import {SlashCommandBuilder} from '../discordjs-builders.js'
 import type {Command} from '../command.js'
 
 const command: Command = {

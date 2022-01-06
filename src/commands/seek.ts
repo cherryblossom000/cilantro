@@ -1,5 +1,5 @@
+import {SlashCommandBuilder, inlineCode} from '@discordjs/builders'
 import {Utils} from 'discord-music-player'
-import {SlashCommandBuilder, inlineCode} from '../discordjs-builders.js'
 import {getPlayingQueue, parseTime, setChannel} from '../utils.js'
 import type {Command} from '../command.js'
 

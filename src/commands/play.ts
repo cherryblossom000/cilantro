@@ -1,6 +1,6 @@
+import {bold, SlashCommandBuilder} from '@discordjs/builders'
 import {DMPError, DMPErrors, Utils} from 'discord-music-player'
 import {getVolume} from '../database.js'
-import {bold, SlashCommandBuilder} from '../discordjs-builders.js'
 import {nowPlayingText, parseTime, setChannel} from '../utils.js'
 import type {PlayOptions} from 'discord-music-player'
 import type {Command} from '../command.js'

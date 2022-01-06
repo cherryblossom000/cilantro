@@ -1,4 +1,4 @@
-import {SlashCommandBuilder, bold} from '../discordjs-builders.js'
+import {SlashCommandBuilder, bold} from '@discordjs/builders'
 import {getPlayingQueue, setChannel} from '../utils.js'
 import type {Command} from '../command.js'
 

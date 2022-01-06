@@ -1,5 +1,5 @@
+import {SlashCommandBuilder} from '@discordjs/builders'
 import {getVolume, setVolume} from '../database.js'
-import {SlashCommandBuilder} from '../discordjs-builders.js'
 import type {Command} from '../command.js'
 
 const VOLUME = 'volume'

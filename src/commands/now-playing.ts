@@ -1,5 +1,5 @@
+import {SlashCommandBuilder, codeBlock} from '@discordjs/builders'
 import {Utils} from 'discord-music-player'
-import {SlashCommandBuilder, codeBlock} from '../discordjs-builders.js'
 import {getPlayingQueue, nowPlayingText} from '../utils.js'
 import type {Command} from '../command.js'
 

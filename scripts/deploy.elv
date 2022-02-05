@@ -11,7 +11,7 @@ rm -r $root-dir/dist
 pnpm build
 pnpm lint
 
-each [line]{
+each {|line|
   var key val = (str:split '=' $line)
   set-env $key $val
 } < $scripts-dir/.env-prod

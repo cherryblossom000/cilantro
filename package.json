@@ -12,9 +12,9 @@
   },
   "scripts": {
     "lint": "eslint --ext ts,cjs .",
-    "lint:dev": "pnpm lint -- --cache",
+    "lint:dev": "dum lint -- --cache",
     "build": "tsc -b",
-    "watch": "pnpm build -- -w",
+    "watch": "dum build -- -w",
     "register-commands": "node scripts/dist/register-commands",
     "start": "node .",
     "init-db": "mkdir db",

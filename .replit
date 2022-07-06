@@ -1,0 +1,2 @@
+lang = "nix"
+run = "pnpm install -P --frozen-lockfile; pnpm install -P --frozen-lockfile && pnpm start"

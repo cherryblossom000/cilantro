@@ -1,0 +1,55 @@
+{
+  "name": "@cherryblossom/cilantro",
+  "version": "0.0.1",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=16.6"
+  },
+  "scripts": {
+    "lint": "eslint --ext ts,cjs .",
+    "lint:dev": "dum lint -- --cache",
+    "build": "tsc -b",
+    "watch": "dum build -- -w",
+    "register-commands": "node scripts/dist/register-commands",
+    "start": "node .",
+    "init-db": "mkdir db",
+    "start-db": "mongod --dbpath db",
+    "stop-db": "kill $(lsof -ntPi :27017)",
+    "deploy": "./scripts/deploy.elv"
+  },
+  "dependencies": {
+    "@discordjs/builders": "0.15.0",
+    "@discordjs/opus": "^0.8.0",
+    "discord-music-player": "^8.3.2",
+    "discord.js": "13.8.1",
+    "dotenv": "^16.0.1",
+    "mongodb": "^4.7.0",
+    "ms": "^2.1.3",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "@cherryblossom/eslint-config": "^16.0.0-beta.4",
+    "@discordjs/rest": "0.5.0",
+    "@types/ms": "^0.7.31",
+    "@types/node": "~16.11.22",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.10.2",
+    "discord-api-types": "0.36.1",
+    "eslint": "^8.19.0",
+    "eslint-import-resolver-typescript": "^3.2.4",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "prettier": "^2.7.1",
+    "typescript": "~4.7.4"
+  }
+}

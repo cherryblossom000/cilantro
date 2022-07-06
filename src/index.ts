@@ -1,16 +1,17 @@
 import * as http from 'node:http'
 import {inlineCode} from '@discordjs/builders'
 import {Player, type Queue} from 'discord-music-player'
-import {Client, Intents} from 'discord.js'
+import {
+  Client,
+  Intents,
+  type CommandInteraction,
+  type GuildTextBasedChannel,
+  type Snowflake
+} from 'discord.js'
 import commands from './commands.js'
 import * as db from './database.js'
 import {dev, handleError, nowPlayingText} from './utils.js'
 import type {AddressInfo} from 'node:net'
-import type {
-  CommandInteraction,
-  GuildTextBasedChannel,
-  Snowflake
-} from 'discord.js'
 import 'dotenv/config'
 
 const database = await db.connect()

@@ -1,12 +1,13 @@
 import {bold, codeBlock} from '@discordjs/builders'
-import {Constants, DiscordAPIError} from 'discord.js'
-import type {Player, Queue, Song} from 'discord-music-player'
-import type {
-  CommandInteraction,
-  Client,
-  GuildTextBasedChannel,
-  Snowflake
+import {
+  Constants,
+  DiscordAPIError,
+  type CommandInteraction,
+  type Client,
+  type GuildTextBasedChannel,
+  type Snowflake
 } from 'discord.js'
+import type {Player, Queue, Song} from 'discord-music-player'
 
 export type KeysMatching<T, V> = {
   [K in keyof T]-?: T[K] extends V ? K : never

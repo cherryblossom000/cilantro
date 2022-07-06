@@ -42,6 +42,9 @@ const player = new Player(client, {deafenOnJoin: true})
       client,
       `The ${inlineCode('error')} player event fired for queue for guild ${
         // not sure why this type assertion is necessary
+        // both the TS language server and typescript-eslint agree that queue is
+        // Queue, but tsc thinks it's Queue | Song | Playlist | undefined
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- ^
         (queue as Queue).guild.id
       }`
     )(error)

@@ -88,7 +88,7 @@ const command: Command = {
   execute: async (interaction, player, guildsToTextChannels, db) => {
     const {guild, guildId, options, user} = interaction
 
-    const voiceChannel = guild?.voiceStates.cache.get(user.id)?.channel
+    const voiceChannel = guild.voiceStates.cache.get(user.id)?.channel
     if (!voiceChannel) {
       await interaction.reply({
         content: 'You must be in a voice channel!',

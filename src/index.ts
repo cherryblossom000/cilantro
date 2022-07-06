@@ -1,6 +1,6 @@
 import * as http from 'node:http'
 import {inlineCode} from '@discordjs/builders'
-import {Player} from 'discord-music-player'
+import {Player, type Queue} from 'discord-music-player'
 import {Client, Intents} from 'discord.js'
 import commands from './commands.js'
 import * as db from './database.js'
@@ -40,7 +40,8 @@ const player = new Player(client, {deafenOnJoin: true})
     handleError(
       client,
       `The ${inlineCode('error')} player event fired for queue for guild ${
-        queue.guild.id
+        // not sure why this type assertion is necessary
+        (queue as Queue).guild.id
       }`
     )(error)
   )
@@ -80,7 +81,7 @@ client
       }
 
       await execute(
-        interaction as CommandInteraction<'present'>,
+        interaction as CommandInteraction<'cached'>,
         player,
         guildsToTextChannels,
         database

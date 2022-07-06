@@ -52,19 +52,34 @@ const command: Command = {
       option
         .setName(UPLOAD_DATE)
         .setDescription('Filter YouTube results by upload date.')
-        .addChoices(Object.entries(uploadDateChoices))
+        .addChoices(
+          ...Object.entries(uploadDateChoices).map(([name, value]) => ({
+            name,
+            value
+          }))
+        )
     )
     .addStringOption(option =>
       option
         .setName(DURATION)
         .setDescription('Filter YouTube results by video duration.')
-        .addChoices(Object.entries(durationDateChoices))
+        .addChoices(
+          ...Object.entries(durationDateChoices).map(([name, value]) => ({
+            name,
+            value
+          }))
+        )
     )
     .addStringOption(option =>
       option
         .setName(SORT)
         .setDescription('Sort YouTube results.')
-        .addChoices(Object.entries(sortChoices))
+        .addChoices(
+          ...Object.entries(sortChoices).map(([name, value]) => ({
+            name,
+            value
+          }))
+        )
     ),
   execute: async (interaction, player, guildsToTextChannels, db) => {
     const {guild, guildId, options, user} = interaction

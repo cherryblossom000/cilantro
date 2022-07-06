@@ -1,11 +1,5 @@
 import {SlashCommandBuilder, hyperlink} from '@discordjs/builders'
-import {
-  Message,
-  MessageActionRow,
-  MessageButton,
-  MessageEmbed
-} from 'discord.js'
-import type {GuildTextBasedChannel} from 'discord.js'
+import {MessageActionRow, MessageButton, MessageEmbed} from 'discord.js'
 import type {Command} from '../command.js'
 
 const BACK_ID = 'back'
@@ -28,7 +22,7 @@ const command: Command = {
     .setName('queue')
     .setDescription('Gets the queue.'),
   execute: async (interaction, player) => {
-    const {channelId, client, guildId, user} = interaction
+    const {guildId, user} = interaction
 
     const songs = player.getQueue(guildId)?.songs
     if (!songs || !songs.length) {
@@ -65,13 +59,7 @@ const command: Command = {
     })
     if (canFitOnOnePage) return
 
-    const collector = (
-      embedMessage instanceof Message
-        ? embedMessage
-        : await (
-            (await client.channels.fetch(channelId)) as GuildTextBasedChannel
-          ).messages.fetch(embedMessage.id)
-    ).createMessageComponentCollector({
+    const collector = embedMessage.createMessageComponentCollector({
       filter: reaction => reaction.user.id === user.id
     })
 

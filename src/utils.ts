@@ -136,7 +136,7 @@ export const nowPlayingText = (song: Song) =>
   `Now playing ${bold(song.name)}.` as const
 
 export const getQueue = async (
-  interaction: CommandInteraction<'present'>,
+  interaction: CommandInteraction<'cached'>,
   player: Player
 ): Promise<Queue | undefined> => {
   const queue = player.getQueue(interaction.guildId)
@@ -148,7 +148,7 @@ export const getQueue = async (
 }
 
 export const getPlayingQueue = async (
-  interaction: CommandInteraction<'present'>,
+  interaction: CommandInteraction<'cached'>,
   player: Player
 ): Promise<PlayingQueue | undefined> => {
   const queue = player.getQueue(interaction.guildId)
@@ -161,7 +161,7 @@ export const getPlayingQueue = async (
 
 export const setChannel = async (
   guildsToTextChannels: Map<Snowflake, GuildTextBasedChannel>,
-  {channelId, client, guildId}: CommandInteraction<'present'>
+  {channelId, client, guildId}: CommandInteraction<'cached'>
 ): Promise<void> => {
   guildsToTextChannels.set(
     guildId,

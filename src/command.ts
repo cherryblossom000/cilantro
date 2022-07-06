@@ -20,7 +20,7 @@ type CommandBase<SupportsDM extends boolean> = PropIfTrue<
   data: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
   execute: (
     interaction: CommandInteraction<
-      SupportsDM extends true ? CacheType : 'present'
+      SupportsDM extends true ? CacheType : 'cached'
     > & {readonly client: Client<true>},
     player: Player,
     guildsToTextChannels: Map<Snowflake, GuildTextBasedChannel>,
